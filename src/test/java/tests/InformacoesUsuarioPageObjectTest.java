@@ -1,11 +1,18 @@
 package tests;
 
 import Suporte.Web;
+import org.easetech.easytest.annotation.DataLoader;
+import org.easetech.easytest.annotation.Param;
+import org.easetech.easytest.runner.DataDrivenTestRunner;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import pages.LoginPage;
+
+@RunWith(DataDrivenTestRunner.class)
+@DataLoader(filePaths = "InformacoesUsuarioPageObjectTest.csv")
 
 public class InformacoesUsuarioPageObjectTest {
     private WebDriver navegador;
@@ -18,6 +25,8 @@ public class InformacoesUsuarioPageObjectTest {
      * as configurações do navegador no before;
      * - Fechar o navegador no After;
      *
+     * Obs: Na clase "Me" conceito de herança com a clase BasePage...
+     *
      */
 
     @Before
@@ -26,15 +35,19 @@ public class InformacoesUsuarioPageObjectTest {
     }
 
     @Test
-    public void testAdicionarUmaInformacaoAdicionalDoUsuario(){
+    public void testAdicionarUmaInformacaoAdicionalDoUsuario(
+            @Param(name="tipo")String tipo,
+            @Param(name="contato")String contato
+            //@Param(name="mensagem")String mensagemEsperada
+            ){
+
         new LoginPage(navegador)
                 .clickSignIn()
-                .typeLogin("julio0001")
-                .typePassword("123456")
-                .clickSignIn()
+                .autenticacao("julio0001","123456")
                 .clickHiUser()
                 .clickMoreDataAboutYou()
-                .clickAddMoreAddAboutMe();
+                .clickAddMoreAddAboutMe()
+                .adicionarContato(tipo, contato);
     }
 
     @After

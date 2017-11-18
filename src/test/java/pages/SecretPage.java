@@ -3,11 +3,10 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class SecretPage {
-    private WebDriver navegador;
+public class SecretPage extends BasePage{
 
-    public SecretPage(WebDriver navegador){
-        this.navegador = navegador;
+    public SecretPage(WebDriver navegador) {
+        super(navegador);
     }
 
     public Me clickHiUser(){
