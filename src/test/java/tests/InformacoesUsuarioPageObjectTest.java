@@ -1,15 +1,21 @@
 package tests;
 
+import Suporte.Generator;
+import Suporte.Screenshot;
 import Suporte.Web;
 import org.easetech.easytest.annotation.DataLoader;
 import org.easetech.easytest.annotation.Param;
 import org.easetech.easytest.runner.DataDrivenTestRunner;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import pages.LoginPage;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(DataDrivenTestRunner.class)
 @DataLoader(filePaths = "InformacoesUsuarioPageObjectTest.csv")
@@ -29,29 +35,41 @@ public class InformacoesUsuarioPageObjectTest {
      *
      */
 
+    @Rule
+    public TestName test = new TestName();
+
     @Before
     public void setUp(){
         navegador = Web.createChrome();
+
+        // navegador = Web.createBrowserStack();
     }
 
     @Test
     public void testAdicionarUmaInformacaoAdicionalDoUsuario(
             @Param(name="tipo")String tipo,
-            @Param(name="contato")String contato
-            //@Param(name="mensagem")String mensagemEsperada
+            @Param(name="contato")String contato,
+            @Param(name="mensagem")String mensagemEsperada
             ){
 
-        new LoginPage(navegador)
+        String textoToast = new LoginPage(navegador)
                 .clickSignIn()
                 .autenticacao("julio0001","123456")
                 .clickHiUser()
                 .clickMoreDataAboutYou()
                 .clickAddMoreAddAboutMe()
-                .adicionarContato(tipo, contato);
+                .adicionarContato(tipo, contato)
+                .capturarTextoToast();
+
+        assertEquals(mensagemEsperada, textoToast);
+
+        String screenshotArquivo = "/home/angelo/IdeaProjects/webdriverJava/screenshot/" + Generator.dataHoraParaArquivo() + test.getMethodName() + ".png";
+        System.out.println(test.getMethodName());
+        Screenshot.tirarScreenshot(navegador, screenshotArquivo);
     }
 
     @After
     public void tearDown(){
-        // navegador.quit();
+        navegador.quit();
     }
 }
