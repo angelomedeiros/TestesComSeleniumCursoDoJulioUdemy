@@ -8,6 +8,8 @@ import java.util.concurrent.TimeUnit;
 public class Web {
 
     public static WebDriver createChrome() {
+        // 1ª Parte do PageObject
+
         // Abrindo navegador
         System.setProperty("webdriver.chrome.driver", "/home/angelo/Testes/drivers/chromedriver");
         WebDriver navegador = new ChromeDriver();
